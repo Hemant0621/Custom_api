@@ -24,7 +24,7 @@ function AdminPanel() {
     useEffect(()=>{
         const loadFlowFromBackend = async () => {
             try {
-                const response = await fetch('http://localhost:5000/admin/connections');
+                const response = await fetch('https://custom-api-two.vercel.app/connections');
                 if (response.ok) {
                     const data = await response.json();
                     const { nodes: savedNodes, edges: savedEdges } = data[0]; // Assuming single flow for now
@@ -131,7 +131,7 @@ function AdminPanel() {
 
         try {
             const response = await axios.post(
-                "http://localhost:5000/admin/apis",
+                "https://custom-api-two.vercel.app/admin/apis",
                 apiNodes
             );
 
@@ -149,7 +149,7 @@ function AdminPanel() {
         }
 
         try {
-            const response = await fetch('http://localhost:5000/admin/connections', {
+            const response = await fetch('https://custom-api-two.vercel.app/admin/connections', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -304,7 +304,7 @@ function AdminPanel() {
                     {selectedNode?.type === "startNode" && (
                         <div>
                             <label>Start URL:</label>
-                            <p>http://localhost:5000/</p>
+                            <p>https://custom-api-two.vercel.app/</p>
                         </div>
                     )}
                     {selectedNode?.type === "apiNode" && (
