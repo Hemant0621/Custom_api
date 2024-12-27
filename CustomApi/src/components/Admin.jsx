@@ -21,7 +21,7 @@ function AdminPanel() {
     const [selectedNode, setSelectedNode] = useState(null);
     const [startnode, setstartnode] = useState(false);
 
-    useEffect(()=>{
+    useEffect(() => {
         const loadFlowFromBackend = async () => {
             try {
                 const response = await fetch('https://custom-api-two.vercel.app/connections');
@@ -39,7 +39,7 @@ function AdminPanel() {
         };
 
         loadFlowFromBackend();
-    },[])
+    }, [])
 
     const updateNodeConnections = useCallback((edge) => {
         setNodes((nds) =>
@@ -116,13 +116,13 @@ function AdminPanel() {
         setNodeCount((prevCount) => prevCount + 1);
     }, [nodeCount, setNodes]);
 
-    const handleSaveFlow = async () => {             
+    const handleSaveFlow = async () => {
         const apiNodes = nodes
             .filter(node => node.type === "apiNode")
             .map(node => ({
                 path: node.data.url,
                 method: node.data.method,
-                headers:  JSON.parse(node.data.headers || "{}"),
+                headers: JSON.parse(node.data.headers || "{}"),
                 body: JSON.parse(node.data.body || "{}"),
                 response: JSON.parse(node.data.response || "{}"),
                 successNode: node.data.success || null,
@@ -132,8 +132,12 @@ function AdminPanel() {
         try {
             const response = await axios.post(
                 "https://custom-api-two.vercel.app/admin/apis",
-                apiNodes
-            );
+                apiNodes, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Access-Control-Allow-Origin": "*"
+                }
+            });
 
             if (response.data.message) {
                 alert("API Flow saved successfully");
@@ -149,14 +153,14 @@ function AdminPanel() {
         }
 
         try {
-            const response = await fetch('https://custom-api-two.vercel.app/admin/connections', {
-                method: 'POST',
+            const response = await axios.post('https://custom-api-two.vercel.app/admin/connections', {
                 headers: {
                     'Content-Type': 'application/json',
+                    "Access-Control-Allow-Origin": "*"
                 },
                 body: JSON.stringify({ nodes, edges }),
             });
-    
+
             if (response.ok) {
                 console.log('Flow saved successfully.');
             } else {
