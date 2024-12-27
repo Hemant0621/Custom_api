@@ -133,11 +133,12 @@ function AdminPanel() {
         try {
             const response = await axios.post(
                 `${Backend_url}admin/apis`,
-                apiNodes, {
+                {
                 headers: {
                     'Content-Type': 'application/json',
                     "Access-Control-Allow-Origin": "*"
-                }
+                },
+                apiNodes
             });
 
             if (response.data.message) {
