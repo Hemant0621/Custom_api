@@ -147,7 +147,7 @@ function AdminPanel() {
         }
 
         try {
-            const response = await axios.post(`${Backend_url}admin/connections`,JSON.stringify({ nodes, edges }), {
+            const response = await axios.post(`${Backend_url}admin/connections`, JSON.stringify({ nodes, edges }), {
                 headers: {
                     'Content-Type': 'application/json',
                     "Access-Control-Allow-Origin": "*"
@@ -302,7 +302,14 @@ function AdminPanel() {
                         <div>
                             <label>Start URL:</label>
                             <p>{Backend_url}</p>
+                            <button
+                                onClick={handleDeleteNode}
+                                className="mt-4 ml-4 bg-red-600 px-4 py-2 rounded hover:bg-red-700"
+                            >
+                                Delete Node
+                            </button>
                         </div>
+
                     )}
                     {selectedNode?.type === "apiNode" && (
                         <div>
