@@ -40,20 +40,24 @@ app.post('/admin/apis', async (req, res) => {
 });
 
 app.post('/admin/connections', async (req, res) => {
+    const { nodes, edges } = req.body;
+
+    if (!nodes || !edges) {
+        return res.status(400).json({ error: 'Nodes and edges are required.' });
+    }
+
     try {
-        const { nodes, edges } = req.body;
+        // Delete all existing connections
+        await Connection.deleteMany({});
 
-        if (!Array.isArray(nodes) || !Array.isArray(edges)) {
-            return res.status(400).json({ error: 'Invalid data format.' });
-        }
+        // Save the new connections
+        const newConnection = new Connection({ nodes, edges });
+        await newConnection.save();
 
-        const connection = new Connection({ nodes, edges });
-        await connection.save();
-
-        res.status(201).json({ message: 'Connection saved successfully.' });
+        res.status(201).json({ message: 'Connections saved successfully.' });
     } catch (error) {
-        console.error('Error saving connection:', error);
-        res.status(500).json({ error: 'Internal server error.' });
+        console.error('Error saving connections:', error);
+        res.status(500).json({ error: 'Error saving connections.' });
     }
 });
 
