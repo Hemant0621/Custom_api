@@ -147,7 +147,7 @@ function AdminPanel() {
         }
 
         try {
-            const response = await axios.post(`${Backend_url}admin/connections`, body: JSON.stringify({ nodes, edges }), {
+            const response = await axios.post(`${Backend_url}admin/connections`,JSON.stringify({ nodes, edges }), {
                 headers: {
                     'Content-Type': 'application/json',
                     "Access-Control-Allow-Origin": "*"
