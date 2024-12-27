@@ -24,7 +24,7 @@ function AdminPanel() {
     useEffect(() => {
         const loadFlowFromBackend = async () => {
             try {
-                const response = await fetch('https://custom-api-two.vercel.app/connections');
+                const response = await fetch('https://custom-api-two.vercel.app/admin/connections');
                 if (response.ok) {
                     const data = await response.json();
                     const { nodes: savedNodes, edges: savedEdges } = data[0]; // Assuming single flow for now
