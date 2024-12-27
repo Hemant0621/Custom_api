@@ -131,15 +131,7 @@ function AdminPanel() {
             }));
 
         try {
-            const response = await axios.post(
-                `${Backend_url}admin/apis`,
-                {
-                headers: {
-                    'Content-Type': 'application/json',
-                    "Access-Control-Allow-Origin": "*"
-                },
-                apiNodes
-            });
+            const response = await axios.post(`${Backend_url}admin/apis`,apiNodes);
 
             if (response.data.message) {
                 alert("API Flow saved successfully");
