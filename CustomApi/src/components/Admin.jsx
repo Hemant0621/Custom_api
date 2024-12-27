@@ -12,6 +12,7 @@ import {
 } from "@xyflow/react";
 
 import "@xyflow/react/dist/style.css";
+import { Backend_url } from "../../config";
 
 function AdminPanel() {
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -24,7 +25,7 @@ function AdminPanel() {
     useEffect(() => {
         const loadFlowFromBackend = async () => {
             try {
-                const response = await fetch('https://custom-api-two.vercel.app/admin/connections');
+                const response = await fetch(`${Backend_url}admin/connections`);
                 if (response.ok) {
                     const data = await response.json();
                     const { nodes: savedNodes, edges: savedEdges } = data[0]; // Assuming single flow for now
@@ -131,7 +132,7 @@ function AdminPanel() {
 
         try {
             const response = await axios.post(
-                "https://custom-api-two.vercel.app/admin/apis",
+                `${Backend_url}admin/apis`,
                 apiNodes, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -153,7 +154,7 @@ function AdminPanel() {
         }
 
         try {
-            const response = await axios.post('https://custom-api-two.vercel.app/admin/connections', {
+            const response = await axios.post(`${Backend_url}/admin/connections`, {
                 headers: {
                     'Content-Type': 'application/json',
                     "Access-Control-Allow-Origin": "*"
@@ -308,7 +309,7 @@ function AdminPanel() {
                     {selectedNode?.type === "startNode" && (
                         <div>
                             <label>Start URL:</label>
-                            <p>https://custom-api-two.vercel.app/</p>
+                            <p>{Backend_url}</p>
                         </div>
                     )}
                     {selectedNode?.type === "apiNode" && (
