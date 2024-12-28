@@ -25,10 +25,14 @@ function AdminPanel() {
     useEffect(() => {
         const loadFlowFromBackend = async () => {
             try {
-                const response = await fetch(`${Backend_url}admin/connections`);
+                const response = await fetch(`${Backend_url}admin/connections`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                });
                 if (response.ok) {
                     const data = await response.json();
-                    const { nodes: savedNodes, edges: savedEdges } = data[0]; // Assuming single flow for now
+                    const { nodes: savedNodes, edges: savedEdges } = data[0];
                     setNodes(savedNodes);
                     setEdges(savedEdges);
                 } else {
@@ -131,7 +135,11 @@ function AdminPanel() {
             }));
 
         try {
-            const response = await axios.post(`${Backend_url}admin/apis`, apiNodes);
+            const response = await axios.post(`${Backend_url}admin/apis`, apiNodes, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
 
             if (response.data.message) {
                 alert("API Flow saved successfully");
@@ -149,9 +157,8 @@ function AdminPanel() {
         try {
             const response = await axios.post(`${Backend_url}admin/connections`, JSON.stringify({ nodes, edges }), {
                 headers: {
-                    'Content-Type': 'application/json',
-                    "Access-Control-Allow-Origin": "*"
-                }
+                    Authorization: `Bearer ${token}`,
+                },
             });
 
             if (response.ok) {
@@ -248,16 +255,13 @@ function AdminPanel() {
 
         apiNode: ({ data }) => (
             <div className=" border w-44 h-44 bg-white rounded shadow">
-                {/* Node Heading */}
                 <div className="bg-gray-200 py-1 font-bold border-black border-b text-center">{data.label}</div>
 
-                {/* Method and URL */}
                 <div className="py-1 px-1 flex gap-2 border items-center border-gray-500 m-2 rounded-lg">
                     {data.method && <div className="text-blue-600 font-normal">{data.method}</div>}
                     {data.url && <div className="text-sm text-gray-500">{data.url}</div>}
                 </div>
 
-                {/* Handles */}
                 <Handle
                     type="target"
                     position="left"
@@ -312,7 +316,7 @@ function AdminPanel() {
                                     value={Backend_url}
                                     contentEditable={false}
                                 />
-                                <div className="absolute -top-6 right-0 bg-black text-white text-center hidden group-hover:flex gap-1 p-1 w-14 text-xs rounded items-center"><img className=" invert h-3" src="/copy.png"/>Copy</div>
+                                <div className="absolute -top-6 right-0 bg-black text-white text-center hidden group-hover:flex gap-1 p-1 w-14 text-xs rounded items-center"><img className=" invert h-3" src="/copy.png" />Copy</div>
                             </div>
                             <button
                                 onClick={handleDeleteNode}

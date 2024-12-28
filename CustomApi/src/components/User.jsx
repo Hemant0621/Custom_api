@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {Backend_url} from "../../config"
+import { Navigate } from 'react-router-dom';
 
 const User = () => {
     const [isRegistering, setIsRegistering] = useState(false);
@@ -28,16 +29,14 @@ const User = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password }),
             });
-
             if (response.ok) {
-                const result = await response.json();
                 if (isRegistering) {
                     setMessage('Registration successful! You can now log in.');
                     setIsRegistering(false);
                 } else {
+                    const result = await response.json();
                     localStorage.setItem('token', result.token);
-                    alert('Login successful!');
-                    // Redirect or perform other actions after login
+                    window.location.href = '/admin';
                 }
             } else {
                 setError(isRegistering ? 'Registration failed.' : 'Invalid username or password.');

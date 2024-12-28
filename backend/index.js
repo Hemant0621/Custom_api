@@ -75,6 +75,10 @@ app.post('/login', async (req, res) => {
     }
 });
 
+app.get('/check',authenticateToken,async (req , res) => {
+    res.status(200).send('success')
+})
+
 app.post('/admin/connections', authenticateToken, async (req, res) => {
     try {
         const userId = req.user._id;
