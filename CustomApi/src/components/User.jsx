@@ -19,8 +19,8 @@ const User = () => {
         }
 
         const url = isRegistering
-            ? `${Backend_url}auth/register`
-            : `${Backend_url}auth/login`;
+            ? `${Backend_url}register`
+            : `${Backend_url}login`;
 
         try {
             const response = await fetch(url, {
