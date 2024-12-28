@@ -38,7 +38,14 @@ const connectionSchema = new mongoose.Schema({
     updatedAt: { type: Date, default: Date.now },     // Timestamp for the last update
 });
 
+const userSchema = new mongoose.Schema({
+    username: { type: String, required: true, unique: true },
+    password: { type: String, required: true }, // Store hashed passwords
+    apiFlow: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Connection' }], // Relates to the Connection schema
+});
+
 const Api = mongoose.model('Api', apiSchema);
 const Connection = mongoose.model('Connection', connectionSchema);
+const User = mongoose.model('User', userSchema);
 
-module.exports = { Api,Connection };
+module.exports = { Api,Connection,User };

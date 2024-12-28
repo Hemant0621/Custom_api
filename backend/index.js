@@ -2,13 +2,15 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const { Api, Connection } = require("./database") // Import Api model
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { authenticateToken } = require('./middleware')
+const { Api, Connection, User } = require("./database") // Import Api model
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-// Route to create a new API
 app.post('/admin/apis', async (req, res) => {
     try {
         for (const body of req.body) {
@@ -39,37 +41,71 @@ app.post('/admin/apis', async (req, res) => {
     }
 });
 
-app.post('/admin/connections', async (req, res) => {
-    const { nodes, edges } = req.body;
-
-    if (!nodes || !edges) {
-        return res.status(400).json({ error: 'Nodes and edges are required.' });
-    }
-
+app.post('/register', async (req, res) => {
     try {
-        // Delete all existing connections
-        await Connection.deleteMany({});
+        const { username, password } = req.body;
 
-        // Save the new connections
-        const newConnection = new Connection({ nodes, edges });
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        const newUser = new User({ username, password: hashedPassword });
+        await newUser.save();
+        res.status(201).send('User registered');
+    } catch (error) {
+        console.log(error)
+        res.status(400).send('Error registering user');
+    }
+});
+
+app.post('/login', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+
+        const user = await User.findOne({ username });
+        if (!user) return res.status(400).send('Invalid credentials');
+
+        const validPass = await bcrypt.compare(password, user.password);
+        if (!validPass) return res.status(400).send('Invalid credentials');
+
+        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
+        res.header('Authorization', token).send({ token });
+    } catch (error) {
+        console.log(error)
+        res.status(400).send('Error logging in');
+    }
+});
+
+app.post('/admin/connections', authenticateToken, async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const { nodes, edges } = req.body;
+
+        await Connection.deleteMany({ user: userId });
+
+        const newConnection = new Connection({ nodes, edges, user: userId });
         await newConnection.save();
 
-        res.status(201).json({ message: 'Connections saved successfully.' });
+        const user = await User.findById(userId);
+        user.apiFlow.push(newConnection._id);
+        await user.save();
+
+        res.status(201).send('Connection saved');
     } catch (error) {
-        console.error('Error saving connections:', error);
-        res.status(500).json({ error: 'Error saving connections.' });
+        res.status(400).send('Error saving connection');
     }
 });
 
-app.get('/admin/connections', async (req, res) => {
+
+app.get('/admin/connections', authenticateToken, async (req, res) => {
     try {
-        const connections = await Connection.find();
+        const userId = req.user._id;
+        const connections = await Connection.find({ user: userId });
         res.json(connections);
     } catch (error) {
-        console.error('Error retrieving connections:', error);
-        res.status(500).json({ error: 'Internal server error.' });
+        res.status(400).send('Error fetching connections');
     }
 });
+
 
 
 // Admin panel route to get existing APIs
@@ -139,7 +175,7 @@ app.use(async (req, res, next) => {
 
 
 
-mongoose.connect('mongodb+srv://hemantkumar2335h:Hemant12@mydata.wprhwlz.mongodb.net/apiFlow', {
+mongoose.connect(process.env.DABASE_CONNECTION_STRING, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => {
