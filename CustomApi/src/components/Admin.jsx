@@ -25,6 +25,7 @@ function AdminPanel() {
     useEffect(() => {
         const loadFlowFromBackend = async () => {
             try {
+                const token = localStorage.getItem('token');
                 const response = await fetch(`${Backend_url}admin/connections`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -135,6 +136,7 @@ function AdminPanel() {
             }));
 
         try {
+            const token = localStorage.getItem('token');
             const response = await axios.post(`${Backend_url}admin/apis`, apiNodes, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -155,6 +157,7 @@ function AdminPanel() {
         }
 
         try {
+            const token = localStorage.getItem('token');
             const response = await axios.post(`${Backend_url}admin/connections`, JSON.stringify({ nodes, edges }), {
                 headers: {
                     Authorization: `Bearer ${token}`,
