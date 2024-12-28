@@ -36,6 +36,7 @@ const connectionSchema = new mongoose.Schema({
     edges: { type: [edgeSchema], required: true },    // List of Edges in the flow
     createdAt: { type: Date, default: Date.now },     // Timestamp for the connection creation
     updatedAt: { type: Date, default: Date.now },     // Timestamp for the last update
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 });
 
 const userSchema = new mongoose.Schema({

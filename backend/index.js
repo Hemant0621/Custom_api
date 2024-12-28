@@ -83,7 +83,7 @@ app.post('/admin/connections', authenticateToken, async (req, res) => {
     try {
         const userId = req.user._id;
         const { nodes, edges } = req.body;
-
+        console.log(userId)
         await Connection.deleteMany({ user: userId });
 
         const newConnection = new Connection({ nodes, edges, user: userId });
@@ -95,6 +95,7 @@ app.post('/admin/connections', authenticateToken, async (req, res) => {
 
         res.status(201).send('Connection saved');
     } catch (error) {
+        console.log(error)
         res.status(400).send('Error saving connection');
     }
 });
