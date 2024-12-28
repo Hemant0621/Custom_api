@@ -288,7 +288,7 @@ function AdminPanel() {
     return (
         <div style={{ width: "100vw", height: "100vh" }}>
             <div
-                className={`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white transition-transform z-20 duration-300 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+                className={`fixed top-0 left-0 h-full w-72 bg-gray-800 text-white transition-transform z-20 duration-300 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
                     }`}
             >
                 <button
@@ -299,9 +299,21 @@ function AdminPanel() {
                 </button>
                 <div className="p-4">
                     {selectedNode?.type === "startNode" && (
-                        <div>
+                        <div className="mt-10 flex flex-col gap-2 group">
                             <label>Start URL:</label>
-                            <p>{Backend_url}</p>
+                            <div className="relative flex flex-col">
+                                <input className="bg-gray-800 border-0 cursor-pointer"
+                                    onClick={(link) => {
+                                        navigator.clipboard.writeText(link.target.value)
+                                            .then(() => {
+                                                alert('Link copied to clipboard!');
+                                            })
+                                    }}
+                                    value={Backend_url}
+                                    contentEditable={false}
+                                />
+                                <div className="absolute -top-6 right-0 bg-black text-white text-center hidden group-hover:flex gap-1 p-1 w-14 text-xs rounded items-center"><img className=" invert h-3" src="/copy.png"/>Copy</div>
+                            </div>
                             <button
                                 onClick={handleDeleteNode}
                                 className="mt-4 ml-4 bg-red-600 px-4 py-2 rounded hover:bg-red-700"
