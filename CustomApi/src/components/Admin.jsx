@@ -28,7 +28,7 @@ function AdminPanel() {
                 const token = localStorage.getItem('token');
                 const response = await fetch(`${Backend_url}admin/connections`, {
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: token,
                     }
                 });
                 if (response.ok) {
@@ -139,7 +139,7 @@ function AdminPanel() {
             const token = localStorage.getItem('token');
             const response = await axios.post(`${Backend_url}admin/apis`, apiNodes, {
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: token,
                 },
             });
 
@@ -158,9 +158,10 @@ function AdminPanel() {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.post(`${Backend_url}admin/connections`, JSON.stringify({ nodes, edges }), {
+            const body = JSON.stringify({ nodes, edges })
+            const response = await axios.post(`${Backend_url}admin/connections`,body, {
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: token,
                 },
             });
 
