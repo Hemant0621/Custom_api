@@ -33,7 +33,8 @@ function AdminPanel() {
                 });
                 if (response.ok) {
                     const data = await response.json();
-                    const { nodes: savedNodes, edges: savedEdges } = data[0];
+                    console.log(data)
+                    const { nodes: savedNodes, edges: savedEdges } = data[0] || {nodes:[],edges:[]};
                     setNodes(savedNodes);
                     setEdges(savedEdges);
                 } else {
