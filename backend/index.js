@@ -68,7 +68,7 @@ app.post('/login', async (req, res) => {
         if (!validPass) return res.status(400).send('Invalid credentials');
 
         const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
-        res.header('Authorization', token).send({ token });
+        res.header('Authorization', token).send({ token , username });
     } catch (error) {
         console.log(error)
         res.status(400).send('Error logging in');

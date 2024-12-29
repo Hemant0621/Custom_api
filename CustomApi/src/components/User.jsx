@@ -36,6 +36,7 @@ const User = () => {
                 } else {
                     const result = await response.json();
                     localStorage.setItem('token', result.token);
+                    localStorage.setItem('user', result.username);
                     window.location.href = '/admin';
                 }
             } else {
