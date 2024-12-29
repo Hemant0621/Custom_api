@@ -33,7 +33,7 @@ function AdminPanel() {
                 });
                 if (response.ok) {
                     const data = await response.json();
-                    const { nodes: savedNodes, edges: savedEdges } = data[0] || {nodes:[],edges:[]};
+                    const { nodes: savedNodes, edges: savedEdges } = data[0] || { nodes: [], edges: [] };
                     setNodes(savedNodes);
                     setEdges(savedEdges);
                 } else {
@@ -159,7 +159,7 @@ function AdminPanel() {
         try {
             const token = localStorage.getItem('token');
             const body = JSON.stringify({ nodes, edges })
-            const response = await axios.post(`${Backend_url}admin/connections`,body, {
+            const response = await axios.post(`${Backend_url}admin/connections`, body, {
                 headers: {
                     Authorization: token,
                 },
@@ -421,30 +421,27 @@ function AdminPanel() {
                 onNodeClick={onNodeClick}
                 nodeTypes={customNodeTypes}
                 edgeTypes={customEdgeTypes}
-                style={{ background: "#f0f0f0" }}
+                style={{ background: "white" }}
             >
                 <Background />
             </ReactFlow>
+            <div className="z-10 fixed right-10 top-5">
+                <div className="flex flex-col group gap-1">
+                    <img className="h-16 cursor-pointer" src="/profile.png" />
+                    <button onClick={()=>{window.location.href = '/'}} className="bg-[#e28086] hidden group-hover:block cursor-pointer  rounded-md p-1 text-white">Log Out</button>
+                </div>
+            </div>
             <div className="fixed bottom-4 right-4 flex gap-4">
-                <button
-                    onClick={addStartNode}
-                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                >
+                <button onClick={addStartNode} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                     Add Start Node
                 </button>
                 {startnode &&
 
-                    <button
-                        onClick={addApiNode}
-                        className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
-                    >
+                    <button onClick={addApiNode} className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
                         Add API Node
                     </button>
                 }
-                <button
-                    onClick={handleSaveFlow}
-                    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-                >
+                <button onClick={handleSaveFlow} className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
                     Save API Flow
                 </button>
             </div>
