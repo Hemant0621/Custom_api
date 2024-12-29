@@ -428,7 +428,11 @@ function AdminPanel() {
             <div className="z-10 fixed right-10 top-5">
                 <div className="flex flex-col group gap-1">
                     <img className="h-16 cursor-pointer" src="/profile.png" />
-                    <button onClick={()=>{window.location.href = '/'}} className="bg-[#e28086] hidden group-hover:block cursor-pointer  rounded-md p-1 text-white">Log Out</button>
+                    <button onClick={()=>{
+                        window.location.href = '/'
+                        window.localStorage.setItem('token','')
+                        window.localStorage.setItem('user','')
+                        }} className="bg-[#e28086] hidden group-hover:block cursor-pointer  rounded-md p-1 text-white">Log Out</button>
                 </div>
             </div>
             <div className="fixed bottom-4 right-4 flex gap-4">
