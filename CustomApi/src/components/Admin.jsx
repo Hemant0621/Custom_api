@@ -26,18 +26,29 @@ function AdminPanel() {
         const loadFlowFromBackend = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await fetch(`${Backend_url}admin/connections`, {
+                const check = await fetch(`${Backend_url}check`, {
                     headers: {
                         Authorization: token,
                     }
                 });
-                if (response.ok) {
-                    const data = await response.json();
-                    const { nodes: savedNodes, edges: savedEdges } = data[0] || { nodes: [], edges: [] };
-                    setNodes(savedNodes);
-                    setEdges(savedEdges);
-                } else {
-                    console.error('Failed to load flow.');
+                if (check.ok) {
+
+                    const response = await fetch(`${Backend_url}admin/connections`, {
+                        headers: {
+                            Authorization: token,
+                        }
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        const { nodes: savedNodes, edges: savedEdges } = data[0] || { nodes: [], edges: [] };
+                        setNodes(savedNodes);
+                        setEdges(savedEdges);
+                    } else {
+                        console.error('Failed to load flow.');
+                    }
+                }
+                else{
+                    window.location.href = '/'
                 }
             } catch (error) {
                 console.error('Error loading flow:', error);
@@ -428,11 +439,11 @@ function AdminPanel() {
             <div className="z-10 fixed right-10 top-5">
                 <div className="flex flex-col group gap-1">
                     <img className="h-16 cursor-pointer" src="/profile.png" />
-                    <button onClick={()=>{
+                    <button onClick={() => {
                         window.location.href = '/'
-                        window.localStorage.setItem('token','')
-                        window.localStorage.setItem('user','')
-                        }} className="bg-[#e28086] hidden group-hover:block cursor-pointer  rounded-md p-1 text-white">Log Out</button>
+                        window.localStorage.setItem('token', '')
+                        window.localStorage.setItem('user', '')
+                    }} className="bg-[#e28086] hidden group-hover:block cursor-pointer  rounded-md p-1 text-white">Log Out</button>
                 </div>
             </div>
             <div className="fixed bottom-4 right-4 flex gap-4">
