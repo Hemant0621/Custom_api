@@ -236,8 +236,8 @@ function AdminPanel() {
                         markerEnd={markerEnd}
                     />
                     <foreignObject
-                        width={20}
-                        height={20}
+                        width={25}
+                        height={25}
                         x={labelX - 10}
                         y={labelY - 10}
                         className="delete-button"
@@ -246,8 +246,9 @@ function AdminPanel() {
                             onClick={() => {
                                 setEdges((es) => es.filter((e) => e.id !== id));
                             }}
+                            className=" bg-white rounded-sm border border-black "
                         >
-                            <img src="/delete.png" alt="delete" />
+                            <img className="p-1" src="/delete.png" alt="delete" />
                         </div>
                     </foreignObject>
                 </>
