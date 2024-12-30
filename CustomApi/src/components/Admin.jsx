@@ -140,7 +140,7 @@ function AdminPanel() {
                 path: node.data.url,
                 method: node.data.method,
                 headers: JSON.parse(node.data.headers || "{}"),
-                body: JSON.parse(node.data.body || "{}"),
+                bodyschema: JSON.parse(node.data.body || "{}"),
                 response: JSON.parse(node.data.response || "{}"),
                 success: node.data.success || null,
                 failure: node.data.failure || null,

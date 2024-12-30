@@ -5,6 +5,7 @@ const apiSchema = new mongoose.Schema({
     method: { type: String, required: true },
     response: { type: Object, required: true },
     headers: { type: Object, default: {} },
+    bodySchema : {type: Object, default : {}},
     functions: { type: [String], default: [] },
     success: { type: String, default: null },
     failure: { type: String, default: null },

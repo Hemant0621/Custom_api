@@ -6,19 +6,35 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { authenticateToken } = require('./middleware')
 const { Api, Connection, User } = require("./database") // Import Api model
-
+const Ajv = require("ajv");
 const app = express();
+
 app.use(bodyParser.json());
 app.use(cors());
+
+const ajv = new Ajv();
+
+function inferSchemaFromObject(body){
+    const schema = { type: "object", properties: {}, required: [] };
+
+    Object.entries(body).forEach(([key, value]) => {
+        schema.properties[key] = { type: typeof(value) };
+        schema.required.push(key);
+    });
+    return schema;
+};
 
 app.post('/admin/apis', async (req, res) => {
     try {
         for (const body of req.body) {
-            const { path, method, response, headers, functions, success, failure } = body;
+            const { path, method, response, bodyschema , headers, functions, success, failure } = body;
 
             if (!path || !method || !response) {
                 return res.status(400).json({ error: 'Path, method, and response are required.' });
             }
+
+            const bodySchema = bodyschema ? inferSchemaFromObject(bodyschema) : null;
+
 
             await Api.findOneAndUpdate(
                 { path },
@@ -26,6 +42,7 @@ app.post('/admin/apis', async (req, res) => {
                     path,
                     method: method.toLowerCase(),
                     response,
+                    bodySchema,
                     headers: headers || {},
                     functions: functions || [],
                     success: success || null,
@@ -68,14 +85,14 @@ app.post('/login', async (req, res) => {
         if (!validPass) return res.status(400).send('Invalid credentials');
 
         const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
-        res.header('Authorization', token).send({ token , username });
+        res.header('Authorization', token).send({ token, username });
     } catch (error) {
         console.log(error)
         res.status(400).send('Error logging in');
     }
 });
 
-app.get('/check',authenticateToken,async (req , res) => {
+app.get('/check', authenticateToken, async (req, res) => {
     res.status(200).send('success')
 })
 
@@ -124,7 +141,7 @@ app.get('/admin/apis', async (req, res) => {
 });
 
 
-// Helper function to handle nested API logic
+
 const processNestedApi = async (api, req, res) => {
     let result = true;
 
@@ -134,24 +151,17 @@ const processNestedApi = async (api, req, res) => {
         });
     }
 
-    if (api.functions && api.functions.length > 0) {
-        for (const fn of api.functions) {
-            try {
-                const functionResult = await eval(fn)(req, res);
-                if (functionResult === false) {
-                    result = false;
-                    break;
-                }
-            } catch (error) {
-                console.error('Error executing function:', error);
-                result = false;
-                break;
-            }
+    if (api.bodySchema && typeof api.bodySchema === "object") {
+        try {
+            const validate = ajv.compile(api.bodySchema);
+            result = validate(req.body) ;
+        } catch (error) {
+            console.error("Invalid body schema:", error);
+            result = false;
         }
     }
 
     const nextNodePath = result ? api.success : api.failure;
-    console.log(nextNodePath)
     if (nextNodePath) {
         const nextApi = await Api.findOne({ path: nextNodePath });
         if (nextApi) {
@@ -163,7 +173,6 @@ const processNestedApi = async (api, req, res) => {
 };
 
 
-// Middleware to dynamically handle API requests
 app.use(async (req, res, next) => {
     try {
         const api = await Api.findOne({ path: req.path, method: req.method.toLowerCase() });
@@ -180,10 +189,16 @@ app.use(async (req, res, next) => {
 
 
 
-mongoose.connect(process.env.DABASE_CONNECTION_STRING, {
+mongoose.connect(process.env.DATABASE_CONNECTION_STRING, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-})
+}).then(() => {
+    console.log("Database connected successfully.");
+}).catch((error) => {
+    console.error("Database connection failed:", error);
+    process.exit(1); 
+});
+
 
 
 const PORT = 5000;
