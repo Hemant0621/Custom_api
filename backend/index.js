@@ -195,7 +195,7 @@ mongoose.connect(process.env.DATABASE_CONNECTION_STRING, {
 }).then(() => {
     console.log("Database connected successfully.");
 }).catch((error) => {
-    console.error("Database connection failed:", error);
+    console.error("Database connection failed: ", error);
     process.exit(1); 
 });
 
