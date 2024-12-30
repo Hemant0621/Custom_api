@@ -142,8 +142,8 @@ function AdminPanel() {
                 headers: JSON.parse(node.data.headers || "{}"),
                 body: JSON.parse(node.data.body || "{}"),
                 response: JSON.parse(node.data.response || "{}"),
-                successNode: node.data.success || null,
-                failureNode: node.data.failure || null,
+                success: node.data.success || null,
+                failure: node.data.failure || null,
             }));
 
         try {

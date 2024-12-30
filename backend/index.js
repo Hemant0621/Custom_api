@@ -151,6 +151,7 @@ const processNestedApi = async (api, req, res) => {
     }
 
     const nextNodePath = result ? api.success : api.failure;
+    console.log(nextNodePath)
     if (nextNodePath) {
         const nextApi = await Api.findOne({ path: nextNodePath });
         if (nextApi) {
