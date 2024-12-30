@@ -3,7 +3,7 @@ import {Backend_url} from "../../config"
 import { Navigate } from 'react-router-dom';
 
 const User = () => {
-    const [isRegistering, setIsRegistering] = useState(false);
+    const [isRegistering, setIsRegistering] = useState(true);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
