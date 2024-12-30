@@ -84,8 +84,7 @@ app.post('/admin/connections', authenticateToken, async (req, res) => {
         const userId = req.user._id;
         const { nodes, edges } = req.body;
 
-        const check = await Connection.deleteMany({ user: userId });
-        console.log(check)
+        await Connection.deleteMany({ user: userId });
         const newConnection = new Connection({ nodes, edges, user: userId });
         await newConnection.save();
 
