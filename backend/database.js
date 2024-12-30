@@ -11,7 +11,7 @@ const apiSchema = new mongoose.Schema({
 });
 
 const apiNodeSchema = new mongoose.Schema({
-    id: { type: String, required: true, unique: true }, // Unique identifier for the node            // Label for the node
+    id: { type: String, required: true}, // Unique identifier for the node            // Label for the node
     data: { type: Object, default: {} },               // Additional data associated with the node
     type: { type: String, required: true },            // Type of the node (e.g., "input", "output", "default")
     position: {                                         // Position of the node in the flowchart
@@ -21,7 +21,7 @@ const apiNodeSchema = new mongoose.Schema({
 });
 
 const edgeSchema = new mongoose.Schema({
-    id: { type: String, required: true, unique: true }, // Unique identifier for the edge
+    id: { type: String, required: true}, // Unique identifier for the edge
     source: { type: String, required: true },           // ID of the source node
     target: { type: String, required: true },           // ID of the target node
     type: { type: String, default: 'default' },         // Type of the edge (e.g., "default", "step", "smooth")
