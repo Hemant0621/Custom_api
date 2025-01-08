@@ -423,19 +423,6 @@ function AdminPanel() {
                 </div>
 
             </div>
-            <ReactFlow
-                nodes={nodes}
-                edges={edges}
-                onNodesChange={onNodesChange}
-                onEdgesChange={onEdgesChange}
-                onConnect={onConnect}
-                onNodeClick={onNodeClick}
-                nodeTypes={customNodeTypes}
-                edgeTypes={customEdgeTypes}
-                style={{ background: "white" }}
-            >
-                <Background />
-            </ReactFlow>
             <div className="z-10 fixed right-10 top-5 flex items-center gap-10">
                     <div className="text-black text-lg"><span className="text-black font-bold ">Welcome ,</span>{window.localStorage.getItem("user")}</div>
                 <div className="flex flex-col group gap-1">
@@ -461,6 +448,19 @@ function AdminPanel() {
                     Save API Flow
                 </button>
             </div>
+            <ReactFlow
+                nodes={nodes}
+                edges={edges}
+                onNodesChange={onNodesChange}
+                onEdgesChange={onEdgesChange}
+                onConnect={onConnect}
+                onNodeClick={onNodeClick}
+                nodeTypes={customNodeTypes}
+                edgeTypes={customEdgeTypes}
+                style={{ background: "white" }}
+            >
+                <Background />
+            </ReactFlow>
         </div>
     );
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {Backend_url} from "../../config"
+import { Backend_url } from "../../config"
 import { Navigate } from 'react-router-dom';
 
 const User = () => {
