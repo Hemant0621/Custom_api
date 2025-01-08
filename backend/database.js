@@ -12,38 +12,38 @@ const apiSchema = new mongoose.Schema({
 });
 
 const apiNodeSchema = new mongoose.Schema({
-    id: { type: String, required: true}, // Unique identifier for the node            // Label for the node
-    data: { type: Object, default: {} },               // Additional data associated with the node
-    type: { type: String, required: true },            // Type of the node (e.g., "input", "output", "default")
-    position: {                                         // Position of the node in the flowchart
+    id: { type: String, required: true}, 
+    data: { type: Object, default: {} },               
+    type: { type: String, required: true },            
+    position: {                                         
         x: { type: Number, required: true },
         y: { type: Number, required: true },
     },             // Custom styles for the node
 });
 
 const edgeSchema = new mongoose.Schema({
-    id: { type: String, required: true}, // Unique identifier for the edge
-    source: { type: String, required: true },           // ID of the source node
-    target: { type: String, required: true },           // ID of the target node
-    type: { type: String, default: 'default' },         // Type of the edge (e.g., "default", "step", "smooth")
-    animated: { type: Boolean, default: false },        // Whether the edge has animations
-    label: { type: String, default: '' },               // Label displayed on the edge
-    style: { type: Object, default: {} },               // Custom styles for the edge
-    arrowHeadType: { type: String, default: 'arrow' },  // Type of the arrowhead (e.g., "arrow", "none")
+    id: { type: String, required: true},
+    source: { type: String, required: true },           
+    target: { type: String, required: true },           
+    type: { type: String, default: 'default' },         
+    animated: { type: Boolean, default: false },        
+    label: { type: String, default: '' },               
+    style: { type: Object, default: {} },               
+    arrowHeadType: { type: String, default: 'arrow' },  
 });
 
 const connectionSchema = new mongoose.Schema({
-    nodes: { type: [apiNodeSchema], required: true }, // List of ApiNodes in the flow
-    edges: { type: [edgeSchema], required: true },    // List of Edges in the flow
-    createdAt: { type: Date, default: Date.now },     // Timestamp for the connection creation
-    updatedAt: { type: Date, default: Date.now },     // Timestamp for the last update
+    nodes: { type: [apiNodeSchema], required: true }, 
+    edges: { type: [edgeSchema], required: true },    
+    createdAt: { type: Date, default: Date.now },     
+    updatedAt: { type: Date, default: Date.now },    
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
 });
 
 const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
-    password: { type: String, required: true }, // Store hashed passwords
-    apiFlow: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Connection' }], // Relates to the Connection schema
+    password: { type: String, required: true },
+    apiFlow: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Connection' }],
 });
 
 const Api = mongoose.model('Api', apiSchema);
